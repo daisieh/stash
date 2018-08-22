@@ -1,7 +1,7 @@
 # stash
 
 [![Build Status](https://travis-ci.org/CDL-Dryad/stash.svg?branch=master)](https://travis-ci.org/CDL-Dryad/stash) 
-
+ 
 ## Introduction
 
 **Stash** is an application framework for research data publication and
