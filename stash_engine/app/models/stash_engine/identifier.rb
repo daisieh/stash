@@ -5,9 +5,11 @@ module StashEngine
     has_one :counter_stat, class_name: 'StashEngine::CounterStat', dependent: :destroy
     has_many :curation_activities, class_name: 'StashEngine::CurationActivity'
     has_many :internal_data, class_name: 'StashEngine::InternalDatum', dependent: :destroy
-    has_one :identifier_state, class_name: 'StashEngine::IdentifierState', dependent: :destroy
-    after_create :create_or_get_identifier_state
-    after_update :create_or_get_identifier_state
+    has_one :current_curation_activity,
+            class_name: 'StashEngine::CurationActivity',
+            primary_key: 'current_curation_activity_id',
+            foreign_key: 'id'
+    after_create :create_curation_state
     # has_many :counter_citations, class_name: 'StashEngine::CounterCitation', dependent: :destroy
     # before_create :build_associations
 
@@ -117,11 +119,10 @@ module StashEngine
       @target = tenant.full_url(StashEngine::Engine.routes.url_helpers.show_path(to_s))
     end
 
-    def create_or_get_identifier_state
-      return identifier_state unless identifier_state.nil?
-      c_a = CurationActivity.create(status: 'Unsubmitted', stash_identifier: self)
-      c_a.save!
-      @identifier_state = IdentifierState.create_identifier_state(self, c_a)
+    def create_curation_state
+      c_a = CurationActivity.create(identifier_id: id, status: 'Unsubmitted', user_id: resources&.first&.user_id)
+      # don't need this because the curation activity has a callback after create/update
+      # update(current_curation_activity_id: c_a.id)
     end
 
     # it's ok ot defer adding this unless someone asks for the counter_stat

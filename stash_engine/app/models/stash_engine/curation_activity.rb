@@ -36,8 +36,9 @@ module StashEngine
     def update_identifier_state
       return if status == 'Status Unchanged'
       return if stash_identifier.nil?
-      return if stash_identifier.identifier_state.nil?
-      stash_identifier.identifier_state.update_identifier_state(self)
+
+      # update the current_curation_activity_id for the identifier associated with this activity
+      stash_identifier.update(current_curation_activity_id: id)
     end
   end
 end

@@ -59,8 +59,10 @@ module StashApi
       # now, if a curationStatus is specified, narrow down the previous result.
       unless params['curationStatus'].nil?
         ds_query = ds_query
-          .joins('LEFT JOIN stash_engine_identifier_states ON stash_engine_identifiers.id = stash_engine_identifier_states.identifier_id')
-          .where('stash_engine_identifier_states.current_curation_status': params['curationStatus'])
+          .joins(:current_curation_activity)
+          .where('stash_engine_curation_activities.status': params['curationStatus'])
+          # .joins('JOIN stash_engine_curation_activities ON stash_engine_identifiers.current_curation_activity_id = stash_engine_curation_activities.id')
+
       end
       @datasets = paged_datasets(ds_query)
       respond_to do |format|
