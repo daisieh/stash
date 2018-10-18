@@ -61,8 +61,6 @@ module StashApi
         ds_query = ds_query
           .joins(:current_curation_activity)
           .where('stash_engine_curation_activities.status': params['curationStatus'])
-          # .joins('JOIN stash_engine_curation_activities ON stash_engine_identifiers.current_curation_activity_id = stash_engine_curation_activities.id')
-
       end
       @datasets = paged_datasets(ds_query)
       respond_to do |format|

@@ -120,7 +120,7 @@ module StashEngine
     end
 
     def create_curation_state
-      c_a = CurationActivity.create(identifier_id: id, status: 'Unsubmitted', user_id: resources&.first&.user_id)
+      CurationActivity.create(identifier_id: id, status: 'Unsubmitted', user_id: resources&.first&.user_id)
       # don't need this because the curation activity has a callback after create/update
       # update(current_curation_activity_id: c_a.id)
     end
